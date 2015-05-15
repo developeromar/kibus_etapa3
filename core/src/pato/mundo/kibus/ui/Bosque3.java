@@ -34,6 +34,18 @@ public class Bosque3 extends MundoKibusBosque {
     }
 
     @Override
+    protected void cargarClick() {
+        super.cargarClick();
+        calor.remove();
+    }
+
+    @Override
+    protected void generarClick() {
+        super.generarClick();
+        calor.remove();
+    }
+
+    @Override
     public void render(float delta) {
         super.render(delta);
 

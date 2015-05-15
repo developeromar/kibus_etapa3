@@ -20,6 +20,9 @@ public class ActorCalor extends Actor implements Disposable{
     TextureRegion calorsito;
     Color color;
     Position[][] calorMapa;
+    public static int max;
+
+    int calorMax;
 
 
 
@@ -41,11 +44,11 @@ public class ActorCalor extends Actor implements Disposable{
     public void draw(Batch batch, float parentAlpha) {
         for(Position[] posFila: calorMapa){
             for(Position pos: posFila) {
-                batch.setColor(color.r, color.g, color.b, pos.getCalor());
+                batch.setColor(color.r, color.g, color.b, pos.getCalor()/max);
                 batch.draw(calorsito, pos.getX(), pos.getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
         }
-        batch.setColor(color.r,color.g,color.b,1f);
+        batch.setColor(color.r, color.g, color.b, 1f);
     }
 
     @Override
@@ -57,4 +60,9 @@ public class ActorCalor extends Actor implements Disposable{
     public void setPosition(Position[][] calorMapa) {
         this.calorMapa=calorMapa;
     }
+    public void setCalorMax(int calorMax) {
+        this.calorMax = calorMax;
+    }
+
+
 }

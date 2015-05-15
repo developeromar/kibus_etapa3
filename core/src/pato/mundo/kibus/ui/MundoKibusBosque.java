@@ -165,8 +165,8 @@ public class MundoKibusBosque extends Bosque{
 
     private void velocidadInit() {
         velocidad=new TextButton("Velocidad",skin);
-        velocidad.setPosition(SLIDERX-30,SLIDERY-80);
-        velocidad.setSize(80,80);
+        velocidad.setPosition(SLIDERX - 30, SLIDERY - 80);
+        velocidad.setSize(80, 80);
         velocidad.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -209,8 +209,8 @@ public class MundoKibusBosque extends Bosque{
         velo.row();
         velo.add(ok).spaceTop(15).width(80);
 
-        velo.setPosition(x/2-(velo.getWidth()/2)-70,y/2);
-        velo.setSize(320,180);
+        velo.setPosition(x / 2 - (velo.getWidth() / 2) - 70, y / 2);
+        velo.setSize(320, 180);
 
         return velo;
     }
@@ -255,11 +255,14 @@ public class MundoKibusBosque extends Bosque{
                 obstaculo.setArreglo(mapa.loadObstaculos(leer.getMatriz(lista.getSelectedIndex())));
                 stage.addActor(obstaculo);
                 kibus.remove();
-                casaKibus.remove();
+                cargarClick();
                 mapa.setKibus(false);
                 mapa.setCasa(false);
             }
         });
+    }
+    protected void cargarClick(){
+        casaKibus.remove();
     }
 
 
@@ -288,14 +291,16 @@ public class MundoKibusBosque extends Bosque{
                 obstaculo.setArreglo(mapa.setObstaculos(slider.getValue()));
                 stage.addActor(obstaculo);
                 kibus.remove();
-                casaKibus.remove();
+                generarClick();
                 mapa.setKibus(false);
                 mapa.setCasa(false);
 
 
-
             }
         });
+    }
+    protected void generarClick(){
+        casaKibus.remove();
     }
 
     private void slider2Init() {
