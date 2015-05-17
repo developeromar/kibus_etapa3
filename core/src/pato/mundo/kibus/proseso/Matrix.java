@@ -76,7 +76,7 @@ public class Matrix {
         if (casaX >= 0 && casaY >= 0 && matriz[casaY][casaX].getEstate() == 0) {
             this.casa = true;
             initCalor();
-            imprimir();
+            //imprimir();
             return true;
         }
         return false;
@@ -87,8 +87,6 @@ public class Matrix {
         int maxTemp;
         boolean sentidoX = dameSentidoCalor(casaX);
         boolean sentidoY = dameSentidoCalor(casaY);
-        System.out.println(casaX);
-        System.out.println(casaY);
         int maxCasaX = Math.max(casaX, 14 - casaX);
         int maxCasaY = Math.max(casaY, 14 - casaY);
         boolean mayorX = (maxCasaX > maxCasaY);
@@ -152,6 +150,64 @@ public class Matrix {
                     if (!((14 - i)+dif <= maxTemp))
                         k += 2;
                 }
+            }
+        }else{
+            if(sentidoX){
+                for (int i = 0; i < 15; i++) {
+                    int k = 2;
+                    for (int j = 0; j < 15; j++) {
+                        if (j+dif <= maxTemp)
+                            matriz[i][j].setCalor(j+dif);
+                        else {
+                            matriz[i][j].setCalor((j+dif) - k);
+                            k += 2;
+                        }
+                    }
+
+                }
+            }else {
+                int k = 2;
+                for (int i = 14; i >= 0; i--) {
+                    for (int j = 0; j < 15; j++) {
+                        if ((14 - i)+dif <= maxTemp)
+                            matriz[j][i].setCalor((14 - i)+dif);
+                        else {
+                            matriz[j][i].setCalor(((14 - i)+dif) - k);
+                        }
+                    }
+                    if (!((14 - i)+dif <= maxTemp))
+                        k += 2;
+                }
+            }
+            if(sentidoY){
+                int k = 2;
+                for (int i = 0; i < 15; i++) {
+
+                    for (int j = 0; j < 15; j++) {
+                        if (i <= maxTemp)
+                            matriz[i][j].setCalor(Math.min(i, matriz[i][j].getCalor()));
+                        else {
+                            matriz[i][j].setCalor(Math.min((i - k), matriz[i][j].getCalor()));
+                        }
+                    }
+                    if (!(i <= maxTemp))
+                        k += 2;
+                }
+            }else {
+                int k = 2;
+                for (int i = 14; i >=0; i--) {
+
+                    for (int j = 0; j <15; j++) {
+                        if (14 - i <= maxTemp)
+                            matriz[i][j].setCalor(Math.min(14-i, matriz[i][j].getCalor()));
+                        else {
+                            matriz[i][j].setCalor(Math.min(((14 - i )-k),matriz[i][j].getCalor()));
+                        }
+                    }
+                    if (!(14 - i <= maxTemp))
+                        k += 2;
+                }
+
             }
         }
 
