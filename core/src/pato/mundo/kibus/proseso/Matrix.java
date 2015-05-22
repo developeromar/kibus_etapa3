@@ -30,6 +30,8 @@ public class Matrix {
     public static final int ARRIBA = 0, IZQUIERDA = 1, DERECHA = 2, ABAJO = 3, ARIZ = 4, ARDER = 5, ABIZ = 6, ABDER = 7;
     private int obsReales;
     private ArrayList<rockObj> rocas;
+    private int centroAbejasX,centroAbejasY;
+
 
 
     private rockObj anteriorPosition;
@@ -60,8 +62,9 @@ public class Matrix {
     }
 
     public boolean setKibus(int x, int y) {
-        this.kibusx = damex(x);
-        this.kibusy = damey(y);
+        this.centroAbejasX=this.kibusx = damex(x);
+        this.centroAbejasY=this.kibusy = damey(y);
+
         this.anteriorPosition = new rockObj(this.kibusx, this.kibusy);
         if (kibusx >= 0 && kibusy >= 0 && matriz[kibusy][kibusx].getEstate() == 0) {
             this.kibus = true;
@@ -398,6 +401,19 @@ public class Matrix {
     public int getPOsCasax() {
         return casaX;
     }
+    public int getAbejasx(){
+        return centroAbejasX;
+    }
+    public int getAbejasy(){
+        return centroAbejasY;
+    }
+
+   /* public int getRealAbejasx(){
+        return matriz;
+    }
+    public int getRealAbejasy(){
+        return centroAbejasY;
+    }*/
 
     public int getKibusx() {
         return matriz[kibusy][kibusx].getX();
@@ -409,6 +425,104 @@ public class Matrix {
 
     public int getCasaY() {
         return matriz[casaY][casaX].getY();
+    }
+
+    public rockObj[] getRealAbejasPosition(rockObj[] posVirtual){
+        rockObj[] posReal=new rockObj[5];
+        for(byte i=0;i<5;i++){
+            posReal[i]=new rockObj(matriz[posVirtual[i].getY()][posVirtual[i].getX()].getX(),matriz[posVirtual[i].getY()][posVirtual[i].getX()].getY());
+        }
+        return posReal;
+    }
+
+
+    public rockObj[] posAbejas(){
+       rockObj respuesta[]=new rockObj[5];
+        int i=0;
+        int j;
+        while(i<5){
+            j=(int)(Math.random()*7);
+
+            switch (j){
+                case ARRIBA:
+                    respuesta[i]=new rockObj(centroAbejasX,centroAbejasY+1);
+                    break;
+                case IZQUIERDA:
+                    respuesta[i]=new rockObj(centroAbejasX-1,centroAbejasY);
+                    break;
+                case DERECHA:
+                    respuesta[i]=new rockObj(centroAbejasX+1,centroAbejasY);
+                    break;
+                case ABAJO:
+                    respuesta[i]=new rockObj(centroAbejasX,centroAbejasY-1);
+                    break;
+                case ARIZ:
+                    respuesta[i]=new rockObj(centroAbejasX-1,centroAbejasY+1);
+                    break;
+                case ARDER:
+                    respuesta[i]=new rockObj(centroAbejasX+1,centroAbejasY+1);
+
+                    break;
+                case ABIZ:
+                    respuesta[i]=new rockObj(centroAbejasX-1,centroAbejasY-1);
+                    break;
+                case ABDER:
+                    respuesta[i]=new rockObj(centroAbejasX+1,centroAbejasY-1);
+                    break;
+
+
+            }
+            if(enRango(respuesta[i])) {
+                if(j==5)
+                    System.out.println(j);
+                if (disponiblePosition(respuesta[i])) {
+                    i++;
+                }
+            }
+        }
+        return respuesta;
+    }
+
+    private boolean enRango(rockObj rockObj) {
+        if(rockObj.getX()>=0&&rockObj.getX()<15&&rockObj.getY()>=0&&rockObj.getY()<15)
+            return true;
+        else
+            return false;
+    }
+
+    private boolean disponiblePosition(rockObj temp){
+        if(matriz[temp.getY()][temp.getX()].getEstate()==0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    public rockObj mayorCalor(rockObj[] abejas){
+        rockObj respuesta=null;
+        float mayorCalor=0,evaluador;
+        for(rockObj iterador:abejas){
+            evaluador=matriz[iterador.getY()][iterador.getX()].getCalor();
+            if(evaluador>=mayorCalor){
+                respuesta=iterador;
+                mayorCalor=evaluador;
+            }
+        }
+        return respuesta;
+    }
+    public rockObj[] unirAbejas(rockObj posMax){
+        rockObj[] respuesta=new rockObj[5];
+        for(byte i=0;i<5;i++){
+            respuesta[i]=posMax;
+        }
+        centroAbejasY=posMax.getY();
+        centroAbejasX=posMax.getX();
+        return respuesta;
+    }
+    public rockObj enfriarMatriz(rockObj union){
+        if(matriz[union.getY()][union.getX()].getCalor()>0)
+            matriz[union.getY()][union.getX()].setCalor((matriz[union.getY()][union.getX()].getCalor()) - 1);
+
+        return union;
     }
 
     public ArrayList<rockObj> setObstaculos(float numObstaculos) {
@@ -525,6 +639,10 @@ public class Matrix {
         this.casa = b;
     }
 
+
+
+
+/*
     public void marcaBandera() {
         try {
             if (matriz[kibusy][kibusx].getEstate() != 2) {
@@ -706,5 +824,5 @@ public class Matrix {
                 break;
         }
         return resp;
-    }
+    }*/
 }

@@ -29,8 +29,8 @@ public class ActorAbeja extends Actor implements Disposable {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if(visible)
-            for(rockObj abeja:abejas){
-                batch.draw(abejon,abeja.getX(),abeja.getY(),getOriginX(),getOriginY(),getWidth(),getHeight(),getScaleX(),getScaleY(),getRotation());
+        for(rockObj abeja:abejas) {
+                batch.draw(abejon, abeja.getX(), abeja.getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
             }
     }
 
@@ -42,5 +42,17 @@ public class ActorAbeja extends Actor implements Disposable {
     @Override
     public void dispose() {
 
+    }
+    public void desaparecerAbejas(){
+        visible=false;
+    }
+
+    public void setAbejas(int kibusx, int kibusy) {
+        rockObj[] temp=new rockObj[5];
+        for(int i=0;i<5;i++){
+           temp[i]=new rockObj(kibusx,kibusy);
+        }
+        abejas=temp;
+        visible=true;
     }
 }

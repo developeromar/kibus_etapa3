@@ -44,6 +44,7 @@ public class MundoKibusBosque extends Bosque{
     ScrollPane sp;
     leeJson leer;
 
+
     boolean sound = true;
 
 
@@ -123,7 +124,7 @@ public class MundoKibusBosque extends Bosque{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 if(mapa.isKibus()&&mapa.isCasa())
-                new regreso(mapa, kibus).start();
+               clickRegresar();
             }
         });
         //padInit();
@@ -142,6 +143,10 @@ public class MundoKibusBosque extends Bosque{
         stage.addActor(crear);
         stage.addActor(load);
         stage.addActor(velocidad);
+
+    }
+
+    protected void clickRegresar() {
 
     }
 
@@ -320,7 +325,7 @@ public class MundoKibusBosque extends Bosque{
             public void changed(ChangeEvent event, Actor actor) {
                 stage.getRoot().removeActor(velo);
                 ocultaTeclado();
-                kibus.setVELOCIDAD((int)Double.parseDouble(porcentaje2.getText().trim()));
+                kibus.setVELOCIDAD((int) Double.parseDouble(porcentaje2.getText().trim()));
             }
         });
     }
@@ -432,14 +437,17 @@ public class MundoKibusBosque extends Bosque{
             int y = (int) Math.round(Gdx.input.getY() / 2.25);
             if (mapa.setKibus(x, 448 - y)) {
                 kibus.initPosition(mapa.getKibusx(), mapa.getKibusy());
+
                // casaKibus.setPosition(mapa.getKibusx(), mapa.getKibusy());
                 stage.addActor(kibus);
+                clickSetKibus(mapa.getKibusx(), mapa.getKibusy());
                 //stage.addActor(casaKibus);
                 btnkibus.setColor(1, 1, 1, 1);
                 kibusSet = false;
             }
         }
     }
+    protected void clickSetKibus(int kibusx,int kibusy){}
 
     @Override
     public void resize(int width, int height) {

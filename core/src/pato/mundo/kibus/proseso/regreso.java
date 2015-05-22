@@ -1,7 +1,10 @@
 package pato.mundo.kibus.proseso;
 
+import com.badlogic.gdx.utils.Timer;
+
 import java.util.ArrayList;
 
+import pato.mundo.kibus.Actores.ActorAbeja;
 import pato.mundo.kibus.Actores.ActorKibus;
 import pato.mundo.kibus.proseso.objetos.rockObj;
 
@@ -12,42 +15,68 @@ public class regreso extends Thread {
 
     Matrix matrix;
     ActorKibus kibus;
+    ActorAbeja abeja;
+    final int DELAY=10;
     rockObj pos;
 
-    public regreso(Matrix matrix, ActorKibus kibus) {
+    public regreso(Matrix matrix, ActorKibus kibus,ActorAbeja abeja) {
 
         this.matrix = matrix;
         this.kibus = kibus;
+        this.abeja=abeja;
     }
 
     @Override
     public void run() {
+
         boolean ciclar=true;
         while (ciclar) {
-            ArrayList<rockObj> ruta = bresenham(matrix.getPOsKibusx(), matrix.getPOsKibusy(), matrix.getPOsCasax(), matrix.getPOsCasay());
+            rockObj[] ruta = new rockObj[5];
+            for(byte i=0;i<5;i++ ){
+                rockObj[] abejas = matrix.posAbejas();
+                try {
+                    Thread.sleep(DELAY);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                abeja.setAbejas(matrix.getRealAbejasPosition(abejas));
+                try {
+                    Thread.sleep(DELAY);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                ruta[i]=matrix.enfriarMatriz(matrix.mayorCalor(abejas));
+                abeja.setAbejas(matrix.getRealAbejasPosition(matrix.unirAbejas(ruta[i])));
+                try {
+                    Thread.sleep(DELAY);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if(matrix.getAbejasx()==matrix.getCasaX()&&matrix.getAbejasy()==matrix.getAbejasy()){
+                    break;
+                }
+            }
+
+
             for (rockObj tem : ruta) {
                 while (!kibus.isSeguir()) ;
                 if (matrix.mover(tem)) {
                     kibus.camina(matrix.getKibusx(), matrix.getKibusy());
-                } else {
-                    break;
+                    while (!kibus.isSeguir()) ;
+                    if(matrix.getKibusx()==matrix.getCasaX()&&matrix.getKibusy()==matrix.getCasaY()){
+                        ciclar=false;
+                        break;
+                    }
                 }
             }
-            while (!kibus.isSeguir()) ;
-            if(matrix.getKibusx()==matrix.getCasaX()&&matrix.getKibusy()==matrix.getCasaY()){
-                ciclar=false;
-            }else {
-                ajusta();
-                while (!kibus.isSeguir()) ;
 
-            }
         }
 
 
 
     }
 
-    private void ajusta() {
+    /*private void ajusta() {
         matrix.marcaBandera();
         matrix.marcaBanderaAnt();
         rockObj temp=matrix.coreccionRuta();
@@ -58,64 +87,9 @@ public class regreso extends Thread {
         if (matrix.mover(temp)) {
             kibus.camina(matrix.getKibusx(), matrix.getKibusy());
         }
-    }
+    }*/
 
-    public void imprimeRuta(ArrayList<rockObj> ruta){
-        for(rockObj tem:ruta){
-            System.out.println("x="+tem.getX()+" y="+tem.getY());
-        }
-    }
 
-    public ArrayList<rockObj> bresenham(int x0, int y0, int x1, int y1) {
-        ArrayList<rockObj> temp=new ArrayList<rockObj>();
-        int x, y, dx, dy, p, incE, incNE, stepx, stepy;
-        dx = (x1 - x0);
-        dy = (y1 - y0);
-        if (dy < 0) {
-            dy = -dy;
-            stepy = -1;
-        } else {
-            stepy = 1;
-        }
-        if (dx < 0) {
-            dx = -dx;
-            stepx = -1;
-        } else {
-            stepx = 1;
-        }
-        x = x0;
-        y = y0;
-        if (dx > dy) {
-            p = 2 * dy - dx;
-            incE = 2 * dy;
-            incNE = 2 * (dy - dx);
-            while (x != x1) {
-                x = x + stepx;
-                if (p < 0) {
-                    p = p + incE;
-                } else {
-                    y = y + stepy;
-                    p = p + incNE;
-                }
-                temp.add(new rockObj(x,y));
-               // g.drawLine(x, y, x, y);
-            }
-        } else {
-            p = 2 * dx - dy;
-            incE = 2 * dx;
-            incNE = 2 * (dx - dy);
-            while (y != y1) {
-                y = y + stepy;
-                if (p < 0) {
-                    p = p + incE;
-                } else {
-                    x = x + stepx;
-                    p = p + incNE;
-                }
-                temp.add(new rockObj(x,y));
-                //g.drawLine(x, y, x, y);
-            }
-        }
-        return temp;
-    }
+
+
 }

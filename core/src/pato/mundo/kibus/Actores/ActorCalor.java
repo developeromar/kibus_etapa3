@@ -60,9 +60,7 @@ public class ActorCalor extends Actor implements Disposable{
     public void setPosition(Position[][] calorMapa) {
         this.calorMapa=calorMapa;
     }
-    public void setCalorMax(int calorMax) {
-        this.calorMax = calorMax;
-    }
+
 
 
 }
